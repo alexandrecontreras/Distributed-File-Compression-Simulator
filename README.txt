@@ -1,84 +1,108 @@
- **PràcticaSO**
+# Distributed File Compression & Recovery Simulator
 
-## **Projecte: MR.J.System**  
-Aquest projecte inclou **quatre programes principals** distribuïts en diferents directoris. Cada programa requereix un fitxer de configuració anomenat `config.dat`, que ha d'estar present al directori corresponent.
+Distributed File Compression & Recovery Simulator is an educational C project that models a distributed system for file compression (referred to as "distortion" in the codebase). The system is composed of several modules:
+
+- **Gotham:** The central server that receives compression (distortion) requests from Fleck clients and delegates them to the main Worker.
+- **Fleck:** The client module that submits file compression requests.
+- **Worker(s):** Perform file compression. One main Worker handles tasks, while backup Workers monitor and can recover/resume in-progress compressions using shared memory if the main Worker fails.
+- **Harley & Enigma:** Additional modules for monitoring, logging, or specialized processing.
+
+## Key Features & Tools
+
+- Multithreading (pthread)
+- Semaphores for synchronization
+- Shared memory for state recovery
+- Process forking for parallelism
+- Socket-based inter-module communication
+- Mutexes for thread safety
+
+**How it works:**  
+Gotham coordinates the system, assigning compression tasks to Workers. If a Worker fails, backup Workers use shared memory to detect and resume incomplete compressions, ensuring reliability and fault tolerance.
 
 ---
 
-## **Programes disponibles**  
-- **Fleck**: ubicat a la carpeta `Fleck/`  
-- **Gotham**: ubicat a la carpeta `Gotham/`  
-- **Enigma**: ubicat dins de `Worker/Enigma/`  
-- **Harley**: ubicat dins de `Worker/Harley/`  
+## Project Structure
+
+This project includes **four main programs** distributed in different directories. Each program requires a configuration file named `config.dat`, which must be present in the corresponding directory.
+
+### Available Programs
+
+- **Fleck:** located in the `Fleck/` folder  
+- **Gotham:** located in the `Gotham/` folder  
+- **Enigma:** located in `Worker/Enigma/`  
+- **Harley:** located in `Worker/Harley/`  
 
 ---
 
-## **Instruccions per a l'execució**  
-Per a la correcta execució de qualsevol dels programes, cal seguir aquests passos:
+## Execution Instructions
 
-1. Accedeix al directori del programa que vols executar.  
-2. Executa la comanda següent, substituint `<nom del procés>` pel nom del programa corresponent (`Enigma`, `Harley`, `Fleck` o `Gotham`):  
-   `./<nom del procés> config.dat`
+To run any of the programs, follow these steps:
 
-### **Requisits previs per a l'execució**  
-Totes les carpetes i subcarpetes ja han estat creades, tot i així aquests son els requisits per a crear totes les carpetes del sistema necessaries per al correcte funcionament 
-d'aquest.
+1. Go to the directory of the program you want to run.  
+2. Run the following command, replacing `<process_name>` with the appropriate program name (`Enigma`, `Harley`, `Fleck`, or `Gotham`):  
+   `./<process_name> config.dat`
 
-Actualment tenim els seguents fitxers de configuració ja adapatats per a que es connectin els diferents processos a la màquina corresponent:
+### Prerequisites
 
-(Nom  |  Fitxer conf | Servidor al qeu ha d'estar connectat | Carpeta associada al procès)
-Gotham -> config.dat ->           (Montserrrat)             ->        No hi ha
-Fleck -> config.dat  ->           (Puigpedros)              ->        /arthur
-Fleck -> config2.dat ->           (Matagalls)               ->        /armand
-Fleck -> config3.dat ->           (Montserrat)              ->        /alex
-Enigma -> config.dat ->           (Matagalls)               ->        /riddler
-Enigma -> donfig.dat ->           (Matagalls)               ->        /rizzler 
-Harley -> config.dat ->           (Puigpedros)              ->        /riddler
-Harley -> donfig.dat ->           (Puigpedros)              ->        /rizzler  
+All folders and subfolders have already been created, but these are the requirements to create all necessary system folders for correct operation.
 
-En cas que vulgueu fer algun canvi respecte els fitxers de configuració o les carpetes associades a aquell procès, siusplau seguiu els següents passos:
+Currently, the following configuration files are adapted so that the different processes connect to the corresponding machine:
 
-**Fleck**:  
-Cal crear el directori especificat al fitxer `config.dat` amb la comanda següent:  
+(Name  |  Config file | Server to connect to | Associated folder)
+- Gotham -> config.dat -> (Montserrat) -> None
+- Fleck -> config.dat  -> (Puigpedros) -> /arthur
+- Fleck -> config2.dat -> (Matagalls)  -> /armand
+- Fleck -> config3.dat -> (Montserrat) -> /alex
+- Enigma -> config.dat -> (Matagalls)  -> /riddler
+- Enigma -> donfig.dat -> (Matagalls)  -> /rizzler 
+- Harley -> config.dat -> (Puigpedros) -> /riddler
+- Harley -> donfig.dat -> (Puigpedros) -> /rizzler  
+
+If you want to make any changes to the configuration files or the folders associated with a process, please follow these steps:
+
+**Fleck:**  
+Create the directory specified in the `config.dat` file with the following command:  
 `mkdir <name_directory>`  
-Aquest directori s'ha de crear dins de la carpeta `Fleck/`.  
+This directory must be created inside the `Fleck/` folder.
 
-**Workers (Harley i Enigma)**:  
-1. Crear el directori especificat al fitxer `config.dat` dins del directori `Harley/` o `Enigma/`:  
+**Workers (Harley and Enigma):**  
+1. Create the directory specified in the `config.dat` file inside the `Harley/` or `Enigma/` directory:  
    `mkdir <name_directory>`  
-2. Crear el directori `unfinished_distortions` (només és necessari fer-ho **una sola vegada**) dins del directori `Worker/`:  
+2. Create the `unfinished_distortions` directory (only necessary **once**) inside the `Worker/` directory:  
    `mkdir Worker/unfinished_distortions`
 
 ---
 
-## **Exemples d'execució**
+## Execution Examples
 
-**Executar Fleck**:  
-cd Fleck/  
-mkdir <name_directory>  
-./Fleck config.dat  
+**Run Fleck:**  
+```sh
+cd Fleck/
+mkdir <name_directory>
+./Fleck config.dat
 
-**Executar Gotham**:  
-cd Gotham/  
-./Gotham config.dat  
+**Run Gotham:**  
+```sh
+cd Gotham/
+./Gotham config.dat
 
-**Executar Harley**:  
-cd Worker/  
-mkdir unfinished_distortions  
-cd Harley/  
-mkdir <name_directory>  
-./Harley config.dat  
+**Run Harley:**  
+```sh
+cd Worker/
+mkdir unfinished_distortions
+cd Harley/
+mkdir <name_directory>
+./Harley config.dat
 
-**Executar Enigma**:  
-cd Worker/Enigma/   
-mkdir <name_directory>  
-./Enigma config.dat  
-
----
-
-## **Observacions**  
-- És important que els fitxers `config.dat` estiguin configurats correctament per a cada programa.  
-- El directori `unfinished_distortions` s'utilitza de manera compartida per `Enigma` i `Harley`, i només cal crear-lo **una sola vegada**.  
-- Es requisit indispensable que tots els Fleck's tinguin noms diferents en el seu fitxer de configuració
+**Run Enigma:**  
+```sh
+cd Worker/Enigma/
+mkdir <name_directory>
+./Enigma config.dat
 
 ---
+
+## Notes
+-It is important that the config.dat files are correctly configured for each program.
+-The unfinished_distortions directory is shared by both Enigma and Harley, and only needs to be created once.
+-It is essential that all Fleck instances have different names in their configuration files.
