@@ -75,34 +75,40 @@ This directory must be created inside the `Fleck/` folder.
 
 ## Execution Examples
 
-**Run Fleck:**  
+### **Run Fleck**
 ```sh
 cd Fleck/
 mkdir <name_directory>
 ./Fleck config.dat
+```
 
-**Run Gotham:**  
+### **Run Gotham**
 ```sh
 cd Gotham/
 ./Gotham config.dat
+```
 
-**Run Harley:**  
+### **Run Harley**
 ```sh
 cd Worker/
 mkdir unfinished_distortions
 cd Harley/
 mkdir <name_directory>
 ./Harley config.dat
+```
 
-**Run Enigma:**  
+### **Run Enigma**
 ```sh
 cd Worker/Enigma/
 mkdir <name_directory>
 ./Enigma config.dat
+```
 
 ---
 
 ## Notes
--It is important that the config.dat files are correctly configured for each program.
--The unfinished_distortions directory is shared by both Enigma and Harley, and only needs to be created once.
--It is essential that all Fleck instances have different names in their configuration files.
+
+- Ensure that the `config.dat` files are correctly configured for each program.
+- The `unfinished_distortions` directory is shared by both **Enigma** and **Harley**, and only needs to be created once.
+- It is essential that all **Fleck** instances have **unique names** defined in their configuration files.
+
